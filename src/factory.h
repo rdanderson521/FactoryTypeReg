@@ -7,29 +7,29 @@
  */
 
 
-#ifndef FACTORY_H
-#define FACTORY_H
+#ifndef BASIC_FACTORY_H
+#define BASIC_FACTORY_H
 
 
 #include <map>
-#include <string>
 #include <concepts>
+#include <memory>
 #include <type_traits>
-#include <iostream>
 
 
 template<class MetaType, class IFace>
-concept MetaClass = requires (MetaType meta)
+concept BasicMetaClass = requires (MetaType meta)
 {
   { meta.create() } ->  std::convertible_to<std::unique_ptr<IFace>>;
   { meta.createShared() } ->  std::convertible_to<std::shared_ptr<IFace>>;
-  { meta.description } ->  std::convertible_to<std::string>;
 };
 
-template<class IFace, MetaClass<IFace> MetaType>
-class Factory
+template<class IFace, BasicMetaClass<IFace> MetaType>
+class BasicFactory
 {
 public:
+  using Meta = MetaType;
+
   static bool registerType(int id, const MetaType &meta);
 
   static int getNumTypes();
@@ -38,30 +38,27 @@ private:
   static std::map<int, MetaType> registeredFactories;
 };
 
-template<class IFace, MetaClass<IFace> MetaType>
-std::map<int, MetaType> Factory<IFace,MetaType>::registeredFactories;
+template<class IFace, BasicMetaClass<IFace> MetaType>
+std::map<int, MetaType> BasicFactory<IFace, MetaType>::registeredFactories;
 
-template<class IFace, MetaClass<IFace> MetaType>
-bool Factory<IFace,MetaType>::registerType(int id, const MetaType &meta)
+template<class IFace, BasicMetaClass<IFace> MetaType>
+bool BasicFactory<IFace, MetaType>::registerType(int id, const MetaType &meta)
 {
-  if (Factory::registeredFactories.contains(id))
+  if (BasicFactory::registeredFactories.contains(id))
   {
-    std::cout << "id: " << id << " already registered" << std::endl;
     return false;
   }
 
-  std::cout << "id: " << id << " metaDesc: " << meta.description << std::endl;
-  Factory::registeredFactories.insert_or_assign(id, meta);
+  BasicFactory::registeredFactories.insert_or_assign(id, meta);
 
   return true;
 }
 
-template<class IFace, MetaClass<IFace> MetaType>
-int Factory<IFace,MetaType>::getNumTypes()
+template<class IFace, BasicMetaClass<IFace> MetaType>
+int BasicFactory<IFace, MetaType>::getNumTypes()
 {
-  std::cout << "size: " << registeredFactories.size() << std::endl;
   return registeredFactories.size();
 }
 
 
-#endif // FACTORY_H
+#endif // BASIC_FACTORY_H

@@ -1,0 +1,28 @@
+/**
+ * @file test.cpp
+ * @author Ryan Anderson <rdanderson521@gmail.com>
+ * @date 20 Apr 2024
+ * @copyright 2024 Ryan Anderson (AllSteady Ltd)
+ * @brief <brief>
+ */
+
+
+#include "test.h"
+
+#include <iostream>
+
+
+const FactoryRegistration<TestFactory> Test::factoryRegistration =
+FactoryRegistration<TestFactory>(1,
+  TestIFace::Meta({
+    &Test::create,
+    &Test::createShared,
+    "Test class"
+  })
+);
+
+
+void Test::testFunc()
+{
+  std::cout << "Test::testFunc" << std::endl;
+}

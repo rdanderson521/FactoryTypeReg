@@ -14,7 +14,7 @@
 #include <memory>
 #include <string>
 
-#include "factory.h"
+#include "overloaded_factory.h"
 
 class TestIFace
 {
@@ -37,7 +37,7 @@ public:
 };
 
 
-using TestFactory = Factory<TestIFace, TestIFace::Meta>;
+using TestFactory = OverloadedFactory<TestIFace, TestIFace::Meta>;
 
 
 #endif // TEST_IFACE_H

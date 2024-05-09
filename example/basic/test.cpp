@@ -13,11 +13,10 @@
 
 
 bool Test::isRegistered = TestFactory::registerType(1,
-TestIFace::Meta({
-  &Test::create,
-  &Test::createShared,
-  "Test class"
-}) );
+  TestIFace::Meta({
+    &Test::create,
+    &Test::createShared
+  }));
 
 void Test::testFunc()
 {
